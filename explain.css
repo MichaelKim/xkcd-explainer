@@ -1,0 +1,8 @@
+#explain-container{
+  padding-left: 30px;
+  padding-right: 30px;
+}
+#explain-container p, li{
+  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+  font-variant: normal;
+}

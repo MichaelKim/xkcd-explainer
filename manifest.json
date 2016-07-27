@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+
+  "name": "xkcd explainer",
+  "description": "This extension displays an explanation of an opened xkcd comic from the explain xkcd wiki.",
+  "version": "1.0",
+
+  "content_scripts": [{
+    "matches": ["http://xkcd.com/*"],
+    "css": ["explain.css"],
+    "js": ["main.js", "parser.js"]
+  }],
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html",
+    "default_title": "xkcd explainer"
+  },
+  "permissions": [
+    "http://explainxkcd.com/*"
+  ]
+}
