@@ -1,8 +1,34 @@
+#explain-button{
+  display: inline-block;
+  background-color: #6E7B91;
+  color: #fff;
+  border: 1.5px solid #333;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 0 12px;
+  margin: 20px 4px 0 4px;
+  text-decoration: none;
+  border-radius: 3px;
+  box-shadow: 0 0 5px 0 gray;
+}
+
+#explain-button:hover{
+  background-color: #fff;
+  color: #6E7B91;
+  box-shadow: none;
+}
+
+#explain-button h2{
+  margin: 0;
+}
+
 #explain-container{
+  display: none;
   padding-left: 30px;
   padding-right: 30px;
 }
-#explain-container p, li{
-  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+
+#explain-container p, #explain-container li{
+  /*font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;*/
   font-variant: normal;
 }

@@ -1,7 +1,19 @@
 var container = document.getElementById("middleContainer"); //container of comic & text
+var displayed = false;
+
+var explainButton = document.createElement("div");
+explainButton.innerHTML = '<a href=# id="explain-button"><h2>Explanation</h2></a>';
+container.appendChild(explainButton);
+
 var explainer = document.createElement("div"); //new div containing explanation
 explainer.id = "explain-container";
 container.appendChild(explainer);
+
+explainButton.addEventListener("click", function(){
+  displayed = !displayed;
+  if(displayed) explainer.style.display = "block";
+  else explainer.style.display = "none";
+});
 
 var url = document.location.href;
 var comicnum = url.replace(/\D/g, '');
@@ -37,7 +49,7 @@ function loadExplain(comic){
     var wikiExplain = temp.value;
 
     var explanation = wikiparse(wikiExplain);
-    explainer.innerHTML += "<h2>Explanation</h2>" + explanation;
+    explainer.innerHTML = explanation + '<p>Read more at the <a href="http://explainxkcd.com/' + comic + '">explain xkcd wiki</a>.</p>';
   });
 }
 
