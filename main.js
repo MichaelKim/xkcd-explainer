@@ -1,8 +1,8 @@
 var container = document.getElementById("middleContainer"); //container of comic & text
-var displayed = false;
+var displayed = false; //toggle explanation
 
 var explainButton = document.createElement("div");
-explainButton.innerHTML = '<a href=# id="explain-button"><h2>Explanation</h2></a>';
+explainButton.innerHTML = '<a href="#" onclick="return false;" id="explain-button"><h2>Explanation</h2></a>';
 container.appendChild(explainButton);
 
 var explainer = document.createElement("div"); //new div containing explanation
@@ -17,17 +17,15 @@ explainButton.addEventListener("click", function(){
 
 var url = document.location.href;
 var comicnum = url.replace(/\D/g, '');
-if(comicnum === ""){
+if(comicnum === ""){ //main page; get latest comic
   getJSON("http://explainxkcd.com/wiki/api.php?action=expandtemplates&format=json&text={{LATESTCOMIC}}", function(obj){
-    comicnum = obj.expandtemplates["*"];
+    comicnum = obj.expandtemplates["*"].replace(/\s+/g, "");
     loadExplain(comicnum);
   });
 }
-else loadExplain(comicnum);
+else loadExplain(comicnum); //comic number in url
 
 function loadExplain(comic){
-  console.log("Loading comic #" + comic);
-
   getJSON("http://explainxkcd.com/wiki/api.php?action=query&prop=revisions&rvprop=content&format=json&redirects=1&titles=" + comic, function(obj){
     var pages = obj.query.pages;
     var page = pages[Object.keys(pages)[0]].revisions[0]["*"];
@@ -48,8 +46,9 @@ function loadExplain(comic){
     temp.innerHTML = rawExplain;
     var wikiExplain = temp.value;
 
+    //parse wikitext into html
     var explanation = wikiparse(wikiExplain);
-    explainer.innerHTML = explanation + '<p>Read more at the <a href="http://explainxkcd.com/' + comic + '">explain xkcd wiki</a>.</p>';
+    explainer.innerHTML = explanation + '<p><b>Read more at the <a href="http://explainxkcd.com/' + comic + '">explain xkcd wiki</a>.</b></p>';
   });
 }
 
