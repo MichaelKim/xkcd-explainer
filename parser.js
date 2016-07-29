@@ -10,10 +10,16 @@ function wikiparse(wikitext){
       line = convertLine(line);
 
       if(line[0] === "*"){ //bullet points
+        var bulletNum = line.match(/^\*+/)[0].length; //number of * in front of string
         line = "<li>" + line.replace(/^\*+ */, "") + "</li>";
-        if(bulletLevel === 0){ //start of bulleting
+
+        if(bulletLevel < bulletNum){ //start of new level of bulleting
           line = "<ul>" + line;
           bulletLevel++;
+        }
+        else if(bulletLevel > bulletNum){ //end of level
+          line = "</ul>" + line;
+          bulletLevel--;
         }
       }
       else if(bulletLevel > 0){ //end of bulleting
@@ -79,7 +85,7 @@ function convertInternalLink(link){
     display = target.substring(separator + 1);
     target = target.substring(0, separator);
   }
-  return '<a href="http://www.explainxkcd.com/wiki/index.php/' + target + '" title="' + target + '">' + display + '</a>';
+  return '<a href="http://www.explainxkcd.com/wiki/index.php/' + encodeURIComponent(target) + '" title="' + target + '">' + display + '</a>';
 }
 
 function convertWhatIfLink(link){
@@ -103,7 +109,7 @@ function convertWikiLink(link){
     display = target.substring(separator + 1);
     target = target.substring(0, separator);
   }
-  return '<a href="http://en.wikipedia.org/wiki/' + target + '" title="wikipedia:' +  target + '">' + display + '</a>';
+  return '<a href="http://en.wikipedia.org/wiki/' + encodeURIComponent(target) + '" title="wikipedia:' +  target + '">' + display + '</a>';
 }
 
 function convertOtherLink(link){
@@ -119,7 +125,7 @@ function convertOtherLink(link){
     display = link.substring(separator + 1, link.length - 1);
   }
 
-  return '<a rel="nofollow" href="' + target + '">' + display + '</a>';
+  return '<a rel="nofollow" href="' + encodeURIComponent(target) + '">' + display + '</a>';
 }
 
 function convertBold(text){
