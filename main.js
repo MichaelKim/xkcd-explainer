@@ -18,7 +18,7 @@ explainButton.addEventListener("click", function(){
 var url = document.location.href;
 var comicnum = url.replace(/\D/g, '');
 if(comicnum === ""){ //main page; get latest comic
-  getJSON("http://explainxkcd.com/wiki/api.php?action=expandtemplates&format=json&text={{LATESTCOMIC}}", function(obj){
+  getJSON("https://explainxkcd.com/wiki/api.php?action=expandtemplates&format=json&text={{LATESTCOMIC}}", function(obj){
     comicnum = obj.expandtemplates["*"].replace(/\s+/g, "");
     loadExplain(comicnum);
   });
@@ -26,7 +26,7 @@ if(comicnum === ""){ //main page; get latest comic
 else loadExplain(comicnum); //comic number in url
 
 function loadExplain(comic){
-  getJSON("http://explainxkcd.com/wiki/api.php?action=query&prop=revisions&rvprop=content&format=json&redirects=1&titles=" + comic, function(obj){
+  getJSON("https://explainxkcd.com/wiki/api.php?action=query&prop=revisions&rvprop=content&format=json&redirects=1&titles=" + comic, function(obj){
     var pages = obj.query.pages;
     var page = pages[Object.keys(pages)[0]].revisions[0]["*"];
 

@@ -7,17 +7,15 @@
   "author": "Michael Kim",
   "homepage_url": "https://github.com/lenkagamine/xkcd-explainer",
   "icons": {
-    "16": "icon.png",
-    "48": "icon48.png",
     "128": "icon128.png"
   },
 
   "content_scripts": [{
-    "matches": ["http://xkcd.com/*"],
+    "matches": ["http://xkcd.com/*", "https://xkcd.com/*"],
     "css": ["explain.css"],
     "js": ["main.js", "parser.js"]
   }],
   "permissions": [
-    "http://explainxkcd.com/*"
+    "https://explainxkcd.com/*"
   ]
 }
