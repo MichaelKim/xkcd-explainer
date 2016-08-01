@@ -35,17 +35,16 @@ function wikiparse(wikitext){
 }
 
 
-function convertLine(line){
-  //subheading
-  //format: ===<text>===
-  if(line.substring(0, 3) === "===" && line.substring(line.length - 3) === "==="){
-    line = "<h3>" + line.substring(3, line.length - 3) + "</h3>";
-  }
-
-  //heading
-  //format: ==<text>==
-  if(line.substring(0, 2) === "==" && line.substring(line.length - 2) === "=="){
-    line = "<h2>" + line.substring(2, line.length - 2) + "</h2>";
+function convertLine(line){ //replace simple inline wiki markup
+  //headings and subheadings
+  //format ==<text>== -> <h2>, ===<text>=== -> h3, etc.
+  if(line[0] === '=' && line[line.length - 1] === '='){
+    var headingLeft = line.match(/^=+/)[0].length; //number of '='s on the left
+    var headingRight = line.match(/=+$/)[0].length; //number of '='s on the right
+    var headingNum = Math.min(headingLeft, headingRight);
+    if(headingNum >= 1 && headingNum <= 6){
+      line = "<h" + headingNum + ">" + line.substring(headingNum, line.length - headingNum) + "</h" + headingNum + ">";
+    }
   }
 
   //internal links
