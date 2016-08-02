@@ -12,6 +12,7 @@
 
   "content_scripts": [{
     "matches": ["http://xkcd.com/*", "https://xkcd.com/*"],
+    "exclude_matches": ["http://xkcd.com/archive/", "https://xkcd.com/archive/"],
     "css": ["explain.css"],
     "js": ["main.js", "parser.js"]
   }],

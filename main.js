@@ -3,11 +3,9 @@ var displayed = false; //toggle explanation
 
 var explainButton = document.createElement("div");
 explainButton.innerHTML = '<a href="#" onclick="return false;" id="explain-button"><h2>Explanation</h2></a>';
-container.appendChild(explainButton);
 
 var explainer = document.createElement("div"); //new div containing explanation
 explainer.id = "explain-container";
-container.appendChild(explainer);
 
 explainButton.addEventListener("click", function(){
   displayed = !displayed;
@@ -15,15 +13,21 @@ explainButton.addEventListener("click", function(){
   else explainer.style.display = "none";
 });
 
-var url = document.location.href;
-var comicnum = url.replace(/\D/g, '');
-if(comicnum === ""){ //main page; get latest comic
-  getJSON("https://explainxkcd.com/wiki/api.php?action=expandtemplates&format=json&text={{LATESTCOMIC}}", function(obj){
-    comicnum = obj.expandtemplates["*"].replace(/\s+/g, "");
-    loadExplain(comicnum);
-  });
+if(container !== null){ //valid xkcd comic
+  container.appendChild(explainButton);
+  container.appendChild(explainer);
+  
+  var url = document.location.href;
+  var comicnum = url.replace(/\D/g, '');
+  if(comicnum === ""){ //main page; get latest comic
+    getJSON("https://explainxkcd.com/wiki/api.php?action=expandtemplates&format=json&text={{LATESTCOMIC}}", function(obj){
+      comicnum = obj.expandtemplates["*"].replace(/\s+/g, "");
+      loadExplain(comicnum);
+    });
+  }
+  else loadExplain(comicnum); //comic number in url
 }
-else loadExplain(comicnum); //comic number in url
+
 
 function loadExplain(comic){
   getJSON("https://explainxkcd.com/wiki/api.php?action=query&prop=revisions&rvprop=content&format=json&redirects=1&titles=" + comic, function(obj){
