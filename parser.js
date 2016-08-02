@@ -46,6 +46,10 @@ function convertLine(line){ //replace simple inline wiki markup
       line = "<h" + headingNum + ">" + line.substring(headingNum, line.length - headingNum) + "</h" + headingNum + ">";
     }
   }
+  
+  //link to another xkcd comic
+  //format: [[<id>: <title]]
+  line = line.replace(/\[\[[0-9]+: [^\]]+\]\]/g, convertComicLink);
 
   //internal links
   //format: [[<target>]] or [[<target>|<display>]]
@@ -71,6 +75,13 @@ function convertLine(line){ //replace simple inline wiki markup
   //format: ''<text>''
   line = line.replace(/''([^'])+''/g, convertItalics);
   return line;
+}
+
+function convertComicLink(link){
+  var separator = link.indexOf(":");
+  var id = link.substring(2, separator);
+  var title = link.substring(separator + 2, link.length - 2);
+  return '<a href="https://xkcd.com/' + id + '">' + id + ": " + title + '</a>';
 }
 
 function convertInternalLink(link){
