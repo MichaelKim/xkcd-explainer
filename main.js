@@ -16,7 +16,7 @@ explainButton.addEventListener("click", function(){
 if(container !== null){ //valid xkcd comic
   container.appendChild(explainButton);
   container.appendChild(explainer);
-  
+
   var url = document.location.href;
   var comicnum = url.replace(/\D/g, '');
   if(comicnum === ""){ //main page; get latest comic
@@ -36,13 +36,19 @@ function loadExplain(comic){
 
     var start = page.indexOf("incomplete");
     if(start === -1){ //incomplete tag at the beginning of explanation
-      start = page.indexOf("==Explanation==") + 16;
+      start = page.indexOf("== Explanation ==") + 18;
+      if(start === -1 + 18){
+        start = page.indexOf("==Explanation==") + 16;
+      }
       if(page[start] == "\n") start++;
     }
     else{ //complete explanation
       start = page.indexOf("\n", start) + 1;
     }
     var end = page.indexOf("==Transcript==") - 1;
+    if(end === -1 - 1){
+      end = page.indexOf("== Transcript ==") - 1;
+    }
 
     //unescape html entities
     var rawExplain = page.substring(start, end);

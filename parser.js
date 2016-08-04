@@ -46,7 +46,7 @@ function convertLine(line){ //replace simple inline wiki markup
       line = "<h" + headingNum + ">" + line.substring(headingNum, line.length - headingNum) + "</h" + headingNum + ">";
     }
   }
-  
+
   //link to another xkcd comic
   //format: [[<id>: <title]]
   line = line.replace(/\[\[[0-9]+: [^\]]+\]\]/g, convertComicLink);
@@ -134,8 +134,7 @@ function convertOtherLink(link){
     target = link.substring(1, separator);
     display = link.substring(separator + 1, link.length - 1);
   }
-
-  return '<a rel="nofollow" href="' + encodeURIComponent(target) + '">' + display + '</a>';
+  return '<a rel="nofollow" href="' + encodeURI(target) + '">' + display + '</a>';
 }
 
 function convertBold(text){
