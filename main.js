@@ -34,7 +34,7 @@ function loadExplain(comic){
     var pages = obj.query.pages;
     var page = pages[Object.keys(pages)[0]].revisions[0]["*"];
 
-    var start = page.indexOf("incomplete");
+    var start = page.indexOf("{{incomplete|");
     if(start === -1){ //incomplete tag at the beginning of explanation
       start = page.indexOf("== Explanation ==") + 18;
       if(start === -1 + 18){
