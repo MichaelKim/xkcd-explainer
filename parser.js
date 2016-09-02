@@ -60,8 +60,8 @@ function convertLine(line){ //replace simple inline wiki markup
   line = line.replace(/{{what if(\|[^\|]+){1,2}}}/g, convertWhatIfLink);
 
   //wikipedia links
-  //format: {{w|<target>}} or {{w|<target>|<display>}}
-  line = line.replace(/{{w(\|[^}]+){1,2}}}/g, convertWikiLink);
+  //format: {{w|<target>}} or {{w|<target>|<display>}} (or W)
+  line = line.replace(/{{[wW](\|[^}]+){1,2}}}/g, convertWikiLink);
 
   //other external links
   //format: [http://<url>] or [http://<url> <display>] (includes https)
