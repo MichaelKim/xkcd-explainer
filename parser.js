@@ -7,7 +7,7 @@ function wikiparse(wikitext){
   for(var i = 0; i < lines.length; i++){
     var line = lines[i];
     if(line !== ""){
-      line = convertLine(line);
+      line = convertLine(line); //perform simple inline parsing
 
       if(line[0] === "*"){ //bullet points
         var bulletNum = line.match(/^\*+/)[0].length; //number of * in front of string
