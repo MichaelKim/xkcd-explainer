@@ -1,13 +1,21 @@
-function wikiparse(wikitext){
+var comicid = 0;
+
+function wikiparse(wikitext, num){
+  comicid = num;
+
   var lines = wikitext.split(/\r?\n/);
+  console.log(lines);
   var html = "";
 
   var bulletLevel = 0; //level of bullet points
+  var quotes = 0; //previous line was quote
 
   for(var i = 0; i < lines.length; i++){
     var line = lines[i];
     if(line !== ""){
       line = convertLine(line); //perform simple inline parsing
+
+      if(line[0] !== "*" && line[0] !== ":") line = "<p>" + line + "</p>";
 
       if(line[0] === "*"){ //bullet points
         var bulletNum = line.match(/^\*+/)[0].length; //number of * in front of string
@@ -23,10 +31,22 @@ function wikiparse(wikitext){
         }
       }
       else if(bulletLevel > 0){ //end of bulleting
-        line = "</ul><p>" + line + "</p>";
+        line = "</ul>" + line;
         bulletLevel--;
       }
-      else line = "<p>" + line + "</p>";
+
+      if(line[0] === ":"){ //quotes
+        line = "<dd>" + line.substring(1) + "</dd>";
+
+      	if(!quotes){ //start of quote
+        	line = "<dl>" + line;
+          quotes = 1;
+        }
+      }
+      else if(quotes){ //end of quote
+      	line = "</dl>" + line;
+        quotes = 0;
+      }
 
       html += line;
     }
@@ -50,6 +70,10 @@ function convertLine(line){ //replace simple inline wiki markup
   //link to another xkcd comic
   //format: [[<id>: <title]]
   line = line.replace(/\[\[[0-9]+: [^\]]+\]\]/g, convertComicLink);
+
+  //link to within explain page
+  //format: [[#<heading>|<display>]]
+  line = line.replace(/\[\[#[^\]]+\]\]/g, convertHeadingLink);
 
   //internal links
   //format: [[<target>]] or [[<target>|<display>]]
@@ -82,6 +106,20 @@ function convertComicLink(link){
   var id = link.substring(2, separator);
   var title = link.substring(separator + 2, link.length - 2);
   return '<a href="https://xkcd.com/' + id + '">' + id + ": " + title + '</a>';
+}
+
+function convertHeadingLink(link){
+  var target = link.substring(3, link.length-2);
+  var display = "";
+  var separator = target.indexOf("|");
+  if(separator === -1){
+    display = target;
+  }
+  else{
+    display = target.substring(separator + 1);
+    target = target.substring(0, separator);
+  }
+  return '<a href="http://www.explainxkcd.com/' + comicid + '#' + encodeURIComponent(target) + '" title="' + target + '">' + display + '</a>';
 }
 
 function convertInternalLink(link){

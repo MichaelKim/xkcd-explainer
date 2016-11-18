@@ -14,8 +14,8 @@ The wikitext parser can parse the following markup:
 - Internal links (within the explain xkcd wiki)
 - Wikipedia links (defaulted to English)
 - Other external links
+- Quotes
 
 Planned Features/Fixes:
-- Quotes
 - Some links don't link correctly
 - Tables

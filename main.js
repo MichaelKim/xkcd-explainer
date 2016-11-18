@@ -57,7 +57,7 @@ function loadExplain(comic){
     var wikiExplain = temp.value;
 
     //parse wikitext into html
-    var explanation = wikiparse(wikiExplain);
+    var explanation = wikiparse(wikiExplain, comicnum);
     explainer.innerHTML = explanation + '<p><b>Read more at the <a href="http://explainxkcd.com/' + comic + '">explain xkcd wiki</a>.</b></p>';
   });
 }
