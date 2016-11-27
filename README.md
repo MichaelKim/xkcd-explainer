@@ -15,6 +15,7 @@ The wikitext parser can parse the following markup:
 - Wikipedia links (defaulted to English)
 - Other external links
 - Quotes
+- Citation needed links (links to comic #285)
 
 Planned Features/Fixes:
 - Some links don't link correctly

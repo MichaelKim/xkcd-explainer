@@ -4,7 +4,6 @@ function wikiparse(wikitext, num){
   comicid = num;
 
   var lines = wikitext.split(/\r?\n/);
-  console.log(lines);
   var html = "";
 
   var bulletLevel = 0; //level of bullet points
@@ -79,6 +78,9 @@ function convertLine(line){ //replace simple inline wiki markup
   //format: [[<target>]] or [[<target>|<display>]]
   line = line.replace(/\[\[[^\]]+\]\]/g, convertInternalLink);
 
+  // citation needed
+  //format: {{Citation needed}}
+  line = line.replace(/{{Citation needed}}/g, convertCitationLink);
   //what if links
   //format: {{what if|<id>|<title>}}
   line = line.replace(/{{what if(\|[^\|]+){1,2}}}/g, convertWhatIfLink);
@@ -134,6 +136,10 @@ function convertInternalLink(link){
     target = target.substring(0, separator);
   }
   return '<a href="http://www.explainxkcd.com/wiki/index.php/' + encodeURIComponent(target) + '" title="' + target + '">' + display + '</a>';
+}
+
+function convertCitationLink(){
+  return '<sup>[<a href="/285" title="285" class="mw-redirect"><i>citation needed</i></a>]</sup>';
 }
 
 function convertWhatIfLink(link){
