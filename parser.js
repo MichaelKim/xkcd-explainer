@@ -5,16 +5,16 @@ function wikiparse(wikitext, num){
 
   var lines = wikitext.split(/\r?\n/);
   var html = "";
-
+console.log(lines);
   var bulletLevel = 0; //level of bullet points
   var quotes = 0; //previous line was quote
+
+  var tablerow = false; //true if currently in table row
 
   for(var i = 0; i < lines.length; i++){
     var line = lines[i];
     if(line !== ""){
       line = convertLine(line); //perform simple inline parsing
-
-      if(line[0] !== "*" && line[0] !== ":") line = "<p>" + line + "</p>";
 
       if(line[0] === "*"){ //bullet points
         var bulletNum = line.match(/^\*+/)[0].length; //number of * in front of string
@@ -30,11 +30,11 @@ function wikiparse(wikitext, num){
         }
       }
       else if(bulletLevel > 0){ //end of bulleting
-        line = "</ul>" + line;
+        line = "</ul><p>" + line + "</p>";
         bulletLevel--;
       }
 
-      if(line[0] === ":"){ //quotes
+      else if(line[0] === ":"){ //quotes
         line = "<dd>" + line.substring(1) + "</dd>";
 
       	if(!quotes){ //start of quote
@@ -43,9 +43,38 @@ function wikiparse(wikitext, num){
         }
       }
       else if(quotes){ //end of quote
-      	line = "</dl>" + line;
+      	line = "</dl><p>" + line + "</p>";
         quotes = 0;
       }
+
+      else if(line[0] === '{' && line[1] === '|'){ //tables
+        line = "<table " + line.substring(2) + ">";
+      }
+      else if(line[0] === '|' && line[1] == '-'){ //start of table row
+        line = "";
+        tablerow = true;
+      }
+      else if(line[0] === '|' && line[1] === '}'){ //end of table
+        line = "</table>"; //no rows?
+        tablerow = false;
+      }
+      else if(line[0] === '!'){ //table heading
+        line = "<th>" + line.substring(1).replace(/!!/g, "</th><th>") + "</th>";
+        if(tablerow){
+          line = "<tr>" + line + "</tr>";
+          tablerow = false;
+        }
+      }
+      else if(line[0] === '|'){ //table cell
+        line = "<td>" + line.substring(1).replace(/\|\|/g, "</td><td>") + "</td>";
+        if(tablerow){
+          line = "<tr>" + line + "</tr>";
+          tablerow = false;
+        }
+      }
+
+      else line = "<p>" + line + "</p>"; //regular text
+
 
       html += line;
     }
