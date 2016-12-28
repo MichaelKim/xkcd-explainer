@@ -5,7 +5,7 @@ function wikiparse(wikitext, num){
 
   var lines = wikitext.split(/\r?\n/);
   var html = "";
-console.log(lines);
+  
   var bulletLevel = 0; //level of bullet points
   var quotes = 0; //previous line was quote
 
