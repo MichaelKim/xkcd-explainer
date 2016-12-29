@@ -3,7 +3,7 @@
 
   "name": "xkcd explainer",
   "description": "Displays an explanation of an opened xkcd comic from the explain xkcd wiki.",
-  "version": "1.0",
+  "version": "2.0",
   "author": "Michael Kim",
   "homepage_url": "https://github.com/lenkagamine/xkcd-explainer",
   "icons": {
