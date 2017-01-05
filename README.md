@@ -30,9 +30,15 @@ The wikitext parser can parse the following markup:
   - ``
 - Other external links
 - Quotes
+  - `: quote` --> `<dl><dd>quote</dd></dl>`
 - Citation needed links (links to comic #285)
-  - `{{Citation needed}}`: `<sup>[<a href="/285" title="285" class="mw-redirect"><i>citation needed</i></a>]</sup>`
+  - `{{Citation needed}}` --> `<sup>[<a href="/285" title="285" class="mw-redirect"><i>citation needed</i></a>]</sup>`
 - Tables
+  - Beginning: `{| css` --> `<table style="css">`
+  - New row: `|-` --> `<tr> ... </tr>`
+  - End of table: `|}` --> `</table>`
+  - Heading: `! Heading1 !! Heading 2 ! Heading 3` --> `<th>Heading1</th><th>Heading2</th><th>Heading3</th>`
+  - Cell: `| Cell1 || Cell2 || Cell3` --> `<tr><td>Cell1</td><td>Cell2</td><td>Cell3</td>`
 
 Planned Features/Fixes:
 - Some links don't link correctly
