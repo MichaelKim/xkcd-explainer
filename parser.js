@@ -5,7 +5,7 @@ function wikiparse(wikitext, num){
 
   var lines = wikitext.split(/\r?\n/);
   var html = "";
-  
+
   var bulletLevel = 0; //level of bullet points
   var quotes = 0; //previous line was quote
 
@@ -96,8 +96,8 @@ function convertLine(line){ //replace simple inline wiki markup
   }
 
   //link to another xkcd comic
-  //format: [[<id>: <title]]
-  line = line.replace(/\[\[[0-9]+: [^\]]+\]\]/g, convertComicLink);
+  //format: [[<id>: <title]] or [[<id>: <title>|<id>]]
+  line = line.replace(/\[\[([0-9]+): [^\]]+(|\1)?\]\]/g, convertComicLink);
 
   //link to within explain page
   //format: [[#<heading>|<display>]]
@@ -110,6 +110,7 @@ function convertLine(line){ //replace simple inline wiki markup
   // citation needed
   //format: {{Citation needed}}
   line = line.replace(/{{Citation needed}}/g, convertCitationLink);
+
   //what if links
   //format: {{what if|<id>|<title>}}
   line = line.replace(/{{what if(\|[^\|]+){1,2}}}/g, convertWhatIfLink);
@@ -118,25 +119,41 @@ function convertLine(line){ //replace simple inline wiki markup
   //format: {{w|<target>}} or {{w|<target>|<display>}} (or W)
   line = line.replace(/{{[wW](\|[^}]+){1,2}}}/g, convertWikiLink);
 
+  //tvtropes links
+  //format: {{tvtropes|<target>|<display>}}
+  line = line.replace(/{{tvtropes(\|[^}]+){2}}}/g, convertTropesLink);
+
   //other external links
   //format: [http://<url>] or [http://<url> <display>] (includes https)
-  line = line.replace(/\[(http|https):\/\/([^\]])+]/g, convertOtherLink);
+  line = line.replace(/\[((http|https):)?\/\/([^\]])+]/g, convertOtherLink);
+
+  //references
+  //line = line.replace(/<ref>.+<\/ref>/g, convertRefLink);
 
   //bold
   //format: '''<text>'''
   line = line.replace(/'''([^'])+'''/g, convertBold);
 
   //italics
-  //format: ''<text>''
-  line = line.replace(/''([^'])+''/g, convertItalics);
+  //format: ''<text>'' or ''<text>
+  line = line.replace(/''[^('')\n]+''/g, convertItalics)
+             .replace(/''.+/g, convertItalics);
   return line;
 }
 
 function convertComicLink(link){
-  var separator = link.indexOf(":");
-  var id = link.substring(2, separator);
-  var title = link.substring(separator + 2, link.length - 2);
-  return '<a href="https://xkcd.com/' + id + '">' + id + ": " + title + '</a>';
+  var firstSep = link.indexOf(":");
+  var secondSep = link.indexOf("|");
+  var id = link.substring(2, firstSep);
+  var display = "";
+  if(secondSep === -1) {
+    var title = link.substring(firstSep + 2, link.length - 2);
+    display = id + ": " + title;
+  }
+  else {
+    display = link.substring(secondSep + 1, link.length - 2);
+  }
+  return '<a href="https://xkcd.com/' + id + '">' + display + '</a>';
 }
 
 function convertHeadingLink(link){
@@ -195,6 +212,18 @@ function convertWikiLink(link){
   return '<a href="http://en.wikipedia.org/wiki/' + encodeURIComponent(target) + '" title="wikipedia:' +  target + '">' + display + '</a>';
 }
 
+function convertTropesLink(link){
+  var firstSep = link.indexOf("|") + 1;
+  var secondSep = link.indexOf("|", firstSep);
+
+  var target = link.substring(firstSep, secondSep);
+  var display = link.substring(secondSep + 1, link.length - 2);
+
+  return '<a rel="nofollow" class="external text" href="http://tvtropes.org/pmwiki/pmwiki.php/Main/' + target + '">' +
+           '<span style="background: #eef;" title="Warning: TV Tropes. See comic 609.">' + display + '</span>' +
+         '</a>';
+}
+
 function convertOtherLink(link){
   var separator = link.indexOf(" ");
   var target = "";
@@ -215,5 +244,8 @@ function convertBold(text){
 }
 
 function convertItalics(text){
-  return "<i>" + text.substring(2, text.length - 2) + "</i>";
+  if(text.substr(-2) === "''") {
+    return "<i>" + text.substring(2, text.length - 2) + "</i>";
+  }
+  return "<i>" + text.substring(2) + "</i>";
 }

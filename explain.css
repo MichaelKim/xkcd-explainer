@@ -33,7 +33,7 @@
 
 #explain-container table.wikitable{
   font-size: 100%;
-  margin: 1em 1em 1em 0;
+  margin: 0 auto;
   background-color: #f9f9f9;
   border: 1px #aaa solid;
   border-collapse: collapse;

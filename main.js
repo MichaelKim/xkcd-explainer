@@ -7,7 +7,7 @@ explainButton.innerHTML = '<a href="#" onclick="return false;" id="explain-butto
 var explainer = document.createElement("div"); //new div containing explanation
 explainer.id = "explain-container";
 
-explainButton.addEventListener("click", function(){
+explainButton.children[0].addEventListener("click", function(){
   displayed = !displayed;
   if(displayed) explainer.style.display = "block";
   else explainer.style.display = "none";
