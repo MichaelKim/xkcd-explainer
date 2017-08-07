@@ -1,4 +1,6 @@
 var comicid = 0;
+var refNum = 0;
+var refs = [];
 
 function wikiparse(wikitext, num){
   comicid = num;
@@ -79,6 +81,15 @@ function wikiparse(wikitext, num){
       html += line;
     }
   }
+
+  if(refNum > 0) {
+    var refFormatted = "<div class='references'><ol>";
+    for(var i = 0; i < refs.length; i++) {
+      refFormatted += "<li id='note-" + i + "'><a href='#ref-" + i + "'>↑</a><span>" + refs[i] + "</span></li>";
+    }
+    refFormatted += "</ol></div>";
+    html += refFormatted;
+  }
   return html;
 }
 
@@ -128,11 +139,11 @@ function convertLine(line){ //replace simple inline wiki markup
   line = line.replace(/\[((http|https):)?\/\/([^\]])+]/g, convertOtherLink);
 
   //references
-  //line = line.replace(/<ref>.+<\/ref>/g, convertRefLink);
+  line = line.replace(/<ref>.+<\/ref>/g, convertRefLink);
 
   //bold
   //format: '''<text>'''
-  line = line.replace(/'''([^'])+'''/g, convertBold);
+  line = line.replace(/'''(?:(?!''').)+'''/g, convertBold);
 
   //italics
   //format: ''<text>'' or ''<text>
@@ -237,6 +248,14 @@ function convertOtherLink(link){
     display = link.substring(separator + 1, link.length - 1);
   }
   return '<a rel="nofollow" href="' + encodeURI(target) + '">' + display + '</a>';
+}
+
+function convertRefLink(link) {
+  var display = link.substring(5, link.length - 6);
+  console.log(display);
+  refNum++;
+  refs.push(display);
+  return "<sup id='ref-" + (refNum - 1) + "'><a href='#note-" + (refNum - 1) + "'>[" + refNum + "]</a></sup>";
 }
 
 function convertBold(text){

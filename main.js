@@ -18,7 +18,9 @@ if(container !== null){ //valid xkcd comic
   container.appendChild(explainer);
 
   var url = document.location.href;
-  var comicnum = url.replace(/\D/g, '');
+  var start = url.indexOf("xkcd.com") + 9;
+  var len = url.substring(start).indexOf("/");
+  var comicnum = url.substr(start, len);
   if(comicnum === ""){ //main page; get latest comic
     getJSON("https://explainxkcd.com/wiki/api.php?action=expandtemplates&format=json&text={{LATESTCOMIC}}", function(obj){
       comicnum = obj.expandtemplates["*"].replace(/\s+/g, "");

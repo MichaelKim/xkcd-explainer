@@ -39,8 +39,12 @@ The wikitext parser can parse the following markup:
   - End of table: `|}` --> `</table>`
   - Heading: `! Heading1 !! Heading 2 ! Heading 3` --> `<th>Heading1</th><th>Heading2</th><th>Heading3</th>`
   - Cell: `| Cell1 || Cell2 || Cell3` --> `<tr><td>Cell1</td><td>Cell2</td><td>Cell3</td>`
+- TV Tropes links (shows warning about comic #609)
+  - `{{tvtropes|<target>|<display>}}` --> `<a rel="nofollow" class="external text" href="http://tvtropes.org/pmwiki/pmwiki.php/Main/target"><span style="background: #eef;" title="Warning: TV Tropes. See comic 609.">display</span></a>`
+- References
+  - `<ref>display</ref>` --> Shows `1. display` as a footnote
 
 Planned Features/Fixes:
-- Some links don't link correctly
 - Paragraph tag is being put on headings (by themselves on a line), etc.
+- Some tables aren't being displayed correctly
 - Citations (`<ref>text</ref>` -> [1], [2], ... `<a href=link>[1]</a>`)

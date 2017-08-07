@@ -28,7 +28,7 @@
   padding-right: 30px;
   font-variant: normal;
   font-size: 14px;
-    /*font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;*/
+  /*font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;*/
 }
 
 #explain-container table.wikitable{
@@ -47,4 +47,9 @@
 #explain-container th, #explain-container td{
   border: 1px #aaa solid;
   padding: 0.2em;
+}
+
+#explain-container .references {
+  font-size: 10px;
+  display: inline-block;
 }
