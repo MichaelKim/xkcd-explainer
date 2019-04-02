@@ -22,7 +22,7 @@ if(container !== null){ //valid xkcd comic
   var len = url.substring(start).indexOf("/");
   var comicnum = url.substr(start, len);
   if(comicnum === ""){ //main page; get latest comic
-    getJSON("https://explainxkcd.com/wiki/api.php?action=expandtemplates&format=json&text={{LATESTCOMIC}}", function(obj){
+    getJSON("https://explainxkcd.com/wiki/api.php?action=expandtemplates&format=json&origin=*&text={{LATESTCOMIC}}", function(obj){
       comicnum = obj.expandtemplates["*"].replace(/\s+/g, "");
       loadExplain(comicnum);
     });
@@ -32,7 +32,7 @@ if(container !== null){ //valid xkcd comic
 
 
 function loadExplain(comic){
-  getJSON("https://explainxkcd.com/wiki/api.php?action=query&prop=revisions&rvprop=content&format=json&redirects=1&titles=" + comic, function(obj){
+  getJSON("https://explainxkcd.com/wiki/api.php?action=query&prop=revisions&rvprop=content&format=json&origin=*&redirects=1&titles=" + comic, function(obj){
     var pages = obj.query.pages;
     var page = pages[Object.keys(pages)[0]].revisions[0]["*"];
 
